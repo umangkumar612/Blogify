@@ -106,7 +106,7 @@ arduino
 Copy code
 
 Server will start at:
-http://localhost:3000
+http://localhost:8000
 
 yaml
 Copy code

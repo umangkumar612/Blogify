@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <%- include('./partials/head') %>
+    <title>Homepage</title>
+
+    <style>
+      body {
+        background: #f5f7fa;
+        font-family: "Poppins", sans-serif;
+      }
+
+      .blog-card {
+        border: none;
+        border-radius: 15px;
+        overflow: hidden;
+        box-shadow: 0 4px 18px rgba(0, 0, 0, 0.09);
+        transition: all 0.3s ease;
+        background: #fff;
+      }
+
+      .blog-card:hover {
+        transform: translateY(-6px);
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+      }
+
+      .blog-image {
+        height: 180px;
+        object-fit: cover;
+      }
+
+      .blog-title {
+        font-size: 1.1rem;
+        font-weight: 600;
+        color: #333;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+      }
+
+      .btn-view {
+        background: linear-gradient(90deg, #6c63ff, #5b55d6);
+        border: none;
+        transition: 0.3s;
+      }
+
+      .btn-view:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 18px rgba(108, 99, 255, 0.4);
+      }
+    </style>
+  </head>
+
+  <body>
+    <%- include('./partials/nav') %>
+
+    <div class="container mt-4">
+      <div class="row g-4 row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4">
+
+        <% blogs.forEach(blog => { %>
+        <div class="col">
+          <div class="card blog-card">
+            <img src="<%= blog.coverImageURL %>" class="card-img-top blog-image" />
+            <div class="card-body">
+              <h5 class="blog-title"><%= blog.title %></h5>
+              <a href="/blog/<%= blog._id %>" class="btn btn-primary btn-view mt-2">Read More</a>
+            </div>
+          </div>
+        </div>
+        <% }) %>
+
+      </div>
+    </div>
+
+    <%- include('./partials/scripts') %>
+  </body>
+</html>

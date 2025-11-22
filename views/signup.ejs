@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <%- include('./partials/head') %>
+    <title>Create Your Account</title>
+
+    <style>
+      body {
+        background: linear-gradient(135deg, #6a11cb, #2575fc);
+        font-family: "Poppins", sans-serif;
+        color: white;
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0;
+      }
+
+      .signup-card {
+        width: 100%;
+        max-width: 450px;
+        padding: 3rem 2.5rem;
+        border-radius: 20px;
+        background: rgba(255, 255, 255, 0.15);
+        backdrop-filter: blur(18px);
+        -webkit-backdrop-filter: blur(18px);
+        box-shadow: 0 8px 35px rgba(0, 0, 0, 0.25);
+        animation: fadeIn 0.6s ease-in-out;
+      }
+
+      @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(20px); }
+        to { opacity: 1; transform: translateY(0); }
+      }
+
+      .signup-card h2 {
+        text-align: center;
+        margin-bottom: 1.8rem;
+        font-weight: 600;
+      }
+
+      .form-group {
+        margin-bottom: 1.4rem;
+        position: relative;
+      }
+
+      .form-group label {
+        font-size: 0.95rem;
+        margin-bottom: 0.4rem;
+        display: block;
+        font-weight: 500;
+      }
+
+      .form-control {
+        width: 100%;
+        padding: 0.75rem 1rem 0.75rem 2.7rem;
+        border-radius: 10px;
+        border: 1px solid rgba(255, 255, 255, 0.4);
+        background: rgba(255, 255, 255, 0.1);
+        color: white;
+        font-size: 0.95rem;
+      }
+
+      .form-control::placeholder {
+        color: rgba(255, 255, 255, 0.7);
+      }
+
+      .input-icon {
+        position: absolute;
+        top: 63%;
+        left: 10px;
+        transform: translateY(-50%);
+        color: rgba(255, 255, 255, 0.85);
+        font-size: 1.1rem;
+      }
+
+      .btn-primary {
+        width: 100%;
+        padding: 0.85rem;
+        margin-top: 0.5rem;
+        border-radius: 10px;
+        background: linear-gradient(90deg, #4b2ae0, #8e2de2);
+        border: none;
+        font-weight: 600;
+        transition: 0.25s;
+      }
+
+      .btn-primary:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 12px 25px rgba(0, 0, 0, 0.25);
+      }
+
+      .bottom-text {
+        margin-top: 1.3rem;
+        text-align: center;
+        font-size: 0.9rem;
+      }
+
+      .bottom-text a {
+        color: #ffffff;
+        font-weight: 600;
+        text-decoration: none;
+      }
+
+      .bottom-text a:hover {
+        text-decoration: underline;
+      }
+
+      /* Hide navbar for cleaner auth page */
+      nav {
+        display: none !important;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="signup-card">
+      <h2>Create Account</h2>
+
+      <form action="/user/signup" method="post">
+        <div class="form-group">
+          <label for="fullName">Full Name</label>
+          <i class="bi bi-person input-icon"></i>
+          <input
+            type="text"
+            class="form-control"
+            id="fullName"
+            name="fullName"
+            placeholder="John Doe"
+            required
+          />
+        </div>
+
+        <div class="form-group">
+          <label for="email">Email Address</label>
+          <i class="bi bi-envelope input-icon"></i>
+          <input
+            type="email"
+            name="email"
+            class="form-control"
+            id="email"
+            placeholder="you@example.com"
+            required
+          />
+        </div>
+
+        <div class="form-group">
+          <label for="password">Password</label>
+          <i class="bi bi-lock input-icon"></i>
+          <input
+            type="password"
+            name="password"
+            class="form-control"
+            id="password"
+            placeholder="••••••••"
+            required
+          />
+        </div>
+
+        <button type="submit" class="btn btn-primary">Sign Up</button>
+      </form>
+
+      <div class="bottom-text">
+        Already have an account?
+        <a href="/user/signin">Log In</a>
+      </div>
+    </div>
+
+    <%- include('./partials/scripts') %>
+  </body>
+</html>

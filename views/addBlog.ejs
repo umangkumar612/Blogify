@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <%- include('./partials/head') %>
+    <title>Add New Blog</title>
+
+    <style>
+      /* Page Background */
+      body {
+        background: #f4f6f9;
+      }
+
+      /* Card Styling */
+      .blog-card {
+        max-width: 650px;
+        margin: auto;
+        padding: 30px;
+        border-radius: 16px;
+        background: #fff;
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+        animation: fadeIn 0.4s ease-in-out;
+      }
+
+      /* Input Focus Glow */
+      .form-control:focus {
+        border-color: #6c63ff;
+        box-shadow: 0 0 0 0.18rem rgba(108, 99, 255, 0.4);
+      }
+
+      /* Button Styling */
+      .btn-primary {
+        background: linear-gradient(90deg, #6c63ff, #5a54d6);
+        border: none;
+        padding: 10px 20px;
+        border-radius: 10px;
+        transition: 0.3s ease;
+      }
+
+      .btn-primary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 18px rgba(108, 99, 255, 0.4);
+      }
+
+      /* Animation */
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      /* Labels Styling */
+      label {
+        font-weight: 600;
+      }
+    </style>
+  </head>
+
+  <body>
+    <%- include('./partials/nav') %>
+
+    <div class="container mt-4">
+      <div class="blog-card">
+        <h3 class="text-center mb-4">📝 Add New Blog</h3>
+
+        <form action="/blog" method="post" enctype="multipart/form-data">
+          
+          <div class="mb-3">
+            <label for="coverImage" class="form-label">Cover Image</label>
+            <input
+              type="file"
+              class="form-control"
+              id="coverImage"
+              name="coverImage"
+            />
+          </div>
+
+          <div class="mb-3">
+            <label for="title" class="form-label">Blog Title</label>
+            <input
+              type="text"
+              class="form-control"
+              id="title"
+              placeholder="Enter your blog title"
+              name="title"
+            />
+          </div>
+
+          <div class="mb-3">
+            <label for="body" class="form-label">Content</label>
+            <textarea
+              name="body"
+              class="form-control"
+              id="body"
+              rows="6"
+              placeholder="Write your blog content here..."
+            ></textarea>
+          </div>
+
+          <div class="d-grid">
+            <button class="btn btn-primary btn-lg">Publish Blog</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <%- include('./partials/scripts') %>
+  </body>
+</html>

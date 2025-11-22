@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <%- include('./partials/head') %>
+    <title>Signin</title>
+
+    <style>
+      :root{
+        --bg-1: #6a11cb;
+        --bg-2: #2575fc;
+        --glass-bg: rgba(255,255,255,0.08);
+        --glass-border: rgba(255,255,255,0.12);
+        --accent: #ff8a05;
+        --soft: #f4f6f9;
+      }
+
+      /* Page background */
+      body {
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        background: linear-gradient(135deg, var(--bg-1), var(--bg-2));
+        font-family: "Poppins", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+        color: #111827;
+      }
+
+      /* Container centering */
+      .auth-wrap {
+        min-height: calc(100vh - 72px); /* keep space for nav (if any) */
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 3rem 1rem;
+      }
+
+      /* Glass card */
+      .auth-card {
+        width: 100%;
+        max-width: 520px;
+        background: linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.04));
+        border-radius: 16px;
+        padding: 2.1rem;
+        box-shadow: 0 12px 40px rgba(10,10,20,0.45);
+        border: 1px solid var(--glass-border);
+        backdrop-filter: blur(10px) saturate(130%);
+        -webkit-backdrop-filter: blur(10px) saturate(130%);
+        color: #fff;
+        overflow: hidden;
+        position: relative;
+        animation: slideUp .45s cubic-bezier(.2,.9,.3,1);
+      }
+
+      @keyframes slideUp {
+        from { opacity: 0; transform: translateY(18px) scale(.995); }
+        to { opacity: 1; transform: translateY(0) scale(1); }
+      }
+
+      /* Brand & heading */
+      .brand-title {
+        font-weight: 800;
+        font-size: 1.6rem;
+        margin: 0 0 .35rem 0;
+        letter-spacing: 0.2px;
+        background: linear-gradient(90deg, #fff, #e9e9ff);
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+      }
+      .subtitle {
+        margin: 0 0 1.25rem 0;
+        font-size: .95rem;
+        color: rgba(255,255,255,0.85);
+      }
+
+      /* Floating label form */
+      .form-group {
+        position: relative;
+        margin-bottom: 1.1rem;
+      }
+
+      .form-control {
+        width: 100%;
+        padding: 14px 14px 14px 46px;
+        background: rgba(255,255,255,0.02);
+        border: 1px solid rgba(255,255,255,0.08);
+        color: #fff;
+        border-radius: 10px;
+        outline: none;
+        transition: all .18s ease;
+        font-size: .95rem;
+      }
+
+      .form-control::placeholder { color: transparent; }
+
+      .form-control:focus {
+        box-shadow: 0 8px 26px rgba(0,0,0,0.45), 0 0 0 0.2rem rgba(106,17,203,0.12);
+        border-color: rgba(255,255,255,0.18);
+      }
+
+      .floating-label {
+        position: absolute;
+        left: 46px;
+        top: 14px;
+        pointer-events: none;
+        font-size: .92rem;
+        color: rgba(255,255,255,0.78);
+        transition: all .18s ease;
+      }
+
+      /* when input has value or focus, float label up */
+      .form-group.focused .floating-label,
+      .form-group.filled .floating-label {
+        transform: translateY(-28px);
+        font-size: .78rem;
+        color: rgba(255,255,255,0.95);
+      }
+
+      /* left icons */
+      .input-icon {
+        position: absolute;
+        left: 12px;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 22px;
+        height: 22px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        color: rgba(255,255,255,0.85);
+        opacity: .95;
+      }
+
+      /* password toggle */
+      .btn-toggle {
+        position: absolute;
+        right: 8px;
+        top: 50%;
+        transform: translateY(-50%);
+        border: none;
+        background: rgba(255,255,255,0.04);
+        color: #fff;
+        padding: 6px 10px;
+        border-radius: 8px;
+        font-size: .85rem;
+      }
+
+      /* Remember / forgot row */
+      .row-between {
+        display:flex;
+        align-items:center;
+        justify-content:space-between;
+        gap: 12px;
+        margin: .25rem 0 1rem 0;
+        color: rgba(255,255,255,0.85);
+      }
+
+      .form-check-input {
+        width: 18px;
+        height: 18px;
+        margin-top: 0.15rem;
+        background: rgba(255,255,255,0.03);
+        border: 1px solid rgba(255,255,255,0.12);
+      }
+
+      /* primary gradient button */
+      .btn-primary-gradient {
+        width:100%;
+        padding: 12px 14px;
+        border-radius: 10px;
+        border: none;
+        background: linear-gradient(90deg, #8A5CFF, #5B55D6);
+        color: #fff;
+        font-weight: 700;
+        box-shadow: 0 10px 30px rgba(91,85,214,0.28);
+        transition: transform .14s ease, box-shadow .14s ease;
+      }
+      .btn-primary-gradient:hover { transform: translateY(-3px); }
+      .btn-primary-gradient:active { transform: translateY(-1px); }
+
+      /* social buttons */
+      .social-row { display:flex; gap:10px; margin-top: 1rem; }
+      .social-btn {
+        flex:1;
+        display:inline-flex;
+        align-items:center;
+        justify-content:center;
+        gap:8px;
+        padding: 10px;
+        border-radius: 10px;
+        border: 1px solid rgba(255,255,255,0.08);
+        background: rgba(255,255,255,0.03);
+        color: #fff;
+        font-weight:600;
+        font-size:.95rem;
+        cursor:pointer;
+      }
+      .social-btn svg { opacity:.95; }
+
+      /* strength meter */
+      .strength {
+        height: 8px;
+        background: rgba(255,255,255,0.06);
+        border-radius: 10px;
+        overflow: hidden;
+        margin-top: .5rem;
+      }
+      .strength > i {
+        display:block;
+        height:100%;
+        width:0%;
+        transition: width .24s ease;
+        background:linear-gradient(90deg, #ff6a00, #ffd600);
+      }
+      .strength-text {
+        font-size: .82rem;
+        margin-top: .45rem;
+        color: rgba(255,255,255,0.85);
+      }
+
+      /* help text and links */
+      .muted { color: rgba(255,255,255,0.75); font-size:.92rem; }
+      .muted a { color: #fff; opacity:.95; text-decoration: underline; }
+
+      /* small screens */
+      @media (max-width: 576px) {
+        .auth-card { padding: 1.6rem; border-radius: 12px; }
+        .brand-title { font-size: 1.35rem; }
+      }
+    </style>
+  </head>
+
+  <body>
+    <%- include('./partials/nav') %>
+
+    <div class="auth-wrap">
+      <div class="auth-card" role="region" aria-label="Signin form">
+
+        <div style="margin-bottom: .6rem">
+          <h1 class="brand-title">Welcome back</h1>
+          <p class="subtitle">Sign in to your account to continue</p>
+        </div>
+
+        <!-- FORM -->
+        <form action="/user/signin" method="post" novalidate id="signinForm" autocomplete="on">
+          <!-- Email -->
+          <div class="form-group" id="g-email">
+            <span class="input-icon" aria-hidden="true">
+              <!-- envelope icon -->
+              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" viewBox="0 0 16 16">
+                <path d="M0 4a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v.217l-8 4.8-8-4.8V4z"/>
+                <path d="M0 6.383v5.617A2 2 0 0 0 2 14h12a2 2 0 0 0 2-2V6.383l-7.555 4.533a1 1 0 0 1-1.09 0L0 6.383z"/>
+              </svg>
+            </span>
+
+            <input
+              id="email"
+              name="email"
+              type="email"
+              class="form-control"
+              placeholder="Email address"
+              required
+              aria-describedby="emailHelp"
+            />
+            <label class="floating-label" for="email">Email address</label>
+            <div id="emailHelp" class="muted" style="margin-top:.45rem">We'll never share your email with anyone.</div>
+          </div>
+
+          <!-- Password -->
+          <div class="form-group" id="g-password" style="margin-top:.4rem">
+            <span class="input-icon" aria-hidden="true">
+              <!-- lock icon -->
+              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" viewBox="0 0 16 16">
+                <path d="M8 1a3 3 0 0 0-3 3v3H4a2 2 0 0 0-2 2v4a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-1V4a3 3 0 0 0-3-3zM6 7V4a2 2 0 1 1 4 0v3H6z"/>
+              </svg>
+            </span>
+
+            <input
+              id="password"
+              name="password"
+              type="password"
+              class="form-control"
+              placeholder="Password"
+              required
+              aria-describedby="passwordHelp"
+            />
+            <label class="floating-label" for="password">Password</label>
+
+            <button type="button" aria-label="Toggle password visibility" class="btn-toggle" id="togglePassword">Show</button>
+
+            <!-- strength meter -->
+            <div class="strength" aria-hidden="true"><i id="strengthBar"></i></div>
+            <div class="strength-text" id="strengthText">Password strength: <strong id="strengthLabel">—</strong></div>
+          </div>
+
+          <!-- remember / forgot -->
+          <div class="row-between">
+            <div class="form-check" style="display:flex; gap:8px; align-items:center;">
+              <input class="form-check-input" type="checkbox" id="remember" name="remember"/>
+              <label for="remember" style="color:rgba(255,255,255,0.9); font-size:.95rem; margin:0">Remember me</label>
+            </div>
+            <div class="muted">
+              <a href="/forgot">Forgot password?</a>
+            </div>
+          </div>
+
+          <!-- submit -->
+          <button type="submit" class="btn-primary-gradient" id="submitBtn">Sign in</button>
+
+          <!-- social -->
+          <div class="social-row" aria-hidden="true">
+            <button type="button" class="social-btn" title="Sign in with Google (UI only)">
+              <!-- google svg -->
+              <svg width="18" height="18" viewBox="0 0 533.5 544.3" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
+                <path fill="#4285F4" d="M533.5 278.4c0-18.3-1.6-36.1-4.6-53.5H272v101.3h146.9c-6.3 34.6-25.4 63.9-54.4 83.5v69.5h87.9c51.4-47.3 81.1-117.1 81.1-200.8z"/>
+                <path fill="#34A853" d="M272 544.3c73.6 0 135.4-24.3 180.5-66.2l-87.9-69.5c-24.5 16.4-56 26-92.6 26-71.1 0-131.4-48-152.8-112.5H29.6v70.6C74.6 487.5 167.6 544.3 272 544.3z"/>
+                <path fill="#FBBC05" d="M119.2 326.1C108 293.3 108 257.7 119.2 224.9V154.3H29.6c-36.3 72.6-36.3 156.9 0 229.5l89.6-57.7z"/>
+                <path fill="#EA4335" d="M272 107.8c39.9 0 75.7 13.7 103.9 40.6l77.8-77.8C407.4 24.8 345.6 0 272 0 167.6 0 74.6 56.8 29.6 142.1l89.6 70.6C140.6 155.8 200.9 107.8 272 107.8z"/>
+              </svg>
+              Google
+            </button>
+
+            <button type="button" class="social-btn" title="Sign in with GitHub (UI only)">
+              <!-- github svg -->
+              <svg width="18" height="18" viewBox="0 0 16 16" aria-hidden="true">
+                <path fill="#fff" d="M8 0C3.58 0 0 3.58 0 8a8 8 0 0 0 5.47 7.59c.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2 .37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.86 2.33.66.07-.52.28-.86.51-1.06-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82a7.6 7.6 0 0 1 4 0c1.53-1.03 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.28.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8 8 0 0 0 16 8c0-4.42-3.58-8-8-8z"/>
+              </svg>
+              GitHub
+            </button>
+          </div>
+
+          <div style="text-align:center; margin-top:1rem; color:rgba(255,255,255,0.85)">
+            <span class="muted">Don’t have an account?</span>
+            <a href="/user/signup" style="font-weight:700; margin-left:6px; color:#fff; text-decoration:underline">Create one</a>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <%- include('./partials/scripts') %>
+
+    <!-- Scripts: floating label behavior, toggle password, strength meter -->
+    <script>
+      (function () {
+        // Helpers
+        const qs = s => document.querySelector(s);
+        const qsa = s => document.querySelectorAll(s);
+
+        // Floating label: add .focused on focus, .filled if value exists
+        ['email','password'].forEach(id => {
+          const el = qs('#' + id);
+          const gp = el && el.closest('.form-group');
+          if (!el || !gp) return;
+
+          const toggleFilled = () => {
+            if (el.value && el.value.trim().length) gp.classList.add('filled');
+            else gp.classList.remove('filled');
+          };
+
+          el.addEventListener('focus', () => gp.classList.add('focused'));
+          el.addEventListener('blur', () => gp.classList.remove('focused'));
+          el.addEventListener('input', toggleFilled);
+          // initial state
+          toggleFilled();
+        });
+
+        // Show/Hide password
+        const toggleBtn = qs('#togglePassword');
+        const pwd = qs('#password');
+        if (toggleBtn && pwd) {
+          toggleBtn.addEventListener('click', () => {
+            const isText = pwd.type === 'text';
+            pwd.type = isText ? 'password' : 'text';
+            toggleBtn.textContent = isText ? 'Show' : 'Hide';
+            toggleBtn.setAttribute('aria-pressed', String(!isText));
+          });
+        }
+
+        // Password strength meter
+        const strengthBar = qs('#strengthBar');
+        const strengthLabel = qs('#strengthLabel');
+
+        function scorePassword(pass) {
+          if (!pass) return 0;
+          let score = 0;
+          // length
+          if (pass.length >= 8) score += 1;
+          if (pass.length >= 12) score += 1;
+          // variety
+          if (/[a-z]/.test(pass) && /[A-Z]/.test(pass)) score += 1;
+          if (/[0-9]/.test(pass)) score += 1;
+          if (/[^A-Za-z0-9]/.test(pass)) score += 1;
+          return Math.min(score, 5);
+        }
+
+        function applyStrength(score) {
+          const pct = Math.round((score / 5) * 100);
+          if (strengthBar) strengthBar.style.width = pct + '%';
+          if (!strengthLabel) return;
+
+          if (score === 0) {
+            strengthLabel.textContent = '—';
+            strengthBar.style.background = 'linear-gradient(90deg, #ff6a00, #ffd600)';
+          } else if (score <= 2) {
+            strengthLabel.textContent = 'Weak';
+            strengthBar.style.background = 'linear-gradient(90deg, #ff4d4f, #ff6a00)';
+          } else if (score === 3) {
+            strengthLabel.textContent = 'Fair';
+            strengthBar.style.background = 'linear-gradient(90deg, #ffb400, #ffd600)';
+          } else if (score === 4) {
+            strengthLabel.textContent = 'Good';
+            strengthBar.style.background = 'linear-gradient(90deg, #48c774, #7ce3b8)';
+          } else {
+            strengthLabel.textContent = 'Strong';
+            strengthBar.style.background = 'linear-gradient(90deg, #2ecc71, #00c853)';
+          }
+        }
+
+        if (pwd) {
+          pwd.addEventListener('input', () => {
+            const s = scorePassword(pwd.value);
+            applyStrength(s);
+          });
+          // initialize
+          applyStrength(scorePassword(pwd.value));
+        }
+
+        // Basic client-side form validation UX (prevents accidental blank submits)
+        const form = qs('#signinForm');
+        const submitBtn = qs('#submitBtn');
+        if (form && submitBtn) {
+          form.addEventListener('submit', (e) => {
+            // simple check
+            const email = qs('#email');
+            const password = qs('#password');
+            const errors = [];
+            if (!email.value || !email.value.trim()) errors.push('Email is required');
+            if (!password.value || !password.value.trim()) errors.push('Password is required');
+            if (errors.length) {
+              e.preventDefault();
+              // temporary lightweight UX: focus first invalid
+              alert(errors.join('\\n'));
+              if (!email.value) email.focus();
+              else password.focus();
+            } else {
+              // optionally disable submit to prevent double submits
+              submitBtn.disabled = true;
+              submitBtn.style.opacity = '.8';
+            }
+          });
+        }
+      })();
+    </script>
+  </body>
+</html>

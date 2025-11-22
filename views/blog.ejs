@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <%- include('./partials/head') %>
+    <title><%= blog.title %></title>
+
+    <style>
+      /* Page BG */
+      body {
+        background: #f4f6f9;
+        font-family: "Poppins", sans-serif;
+      }
+
+      /* Blog Container */
+      .blog-container {
+        max-width: 850px;
+        margin: auto;
+        padding: 30px;
+        background: #fff;
+        border-radius: 18px;
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+        animation: fadeIn 0.4s ease-in-out;
+      }
+
+      .blog-title {
+        font-size: 2.3rem;
+        font-weight: 700;
+        color: #333;
+        margin-bottom: 20px;
+      }
+
+      .blog-image {
+        width: 100%;
+        border-radius: 12px;
+        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.15);
+        margin-bottom: 25px;
+      }
+
+      .blog-content {
+        font-size: 1.1rem;
+        white-space: pre-wrap;
+        line-height: 1.7;
+        color: #444;
+      }
+
+      /* Author Card */
+      .author-card {
+        max-width: 850px;
+        margin: 20px auto;
+        background: #fff;
+        padding: 18px;
+        border-radius: 14px;
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        box-shadow: 0 4px 18px rgba(0, 0, 0, 0.08);
+        animation: fadeIn 0.5s ease-in-out;
+      }
+
+      .author-img {
+        width: 55px;
+        height: 55px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 2px solid #6c63ff;
+      }
+
+      /* Comments Section */
+      .comment-box {
+        max-width: 850px;
+        margin: auto;
+        background: #fff;
+        padding: 25px;
+        border-radius: 16px;
+        box-shadow: 0 6px 22px rgba(0, 0, 0, 0.08);
+        margin-top: 25px;
+        animation: fadeIn 0.6s ease-in-out;
+      }
+
+      .comment-title {
+        font-weight: 600;
+        font-size: 1.4rem;
+      }
+
+      .comment-item {
+        background: #f7f8fc;
+        padding: 14px;
+        border-radius: 12px;
+        margin-bottom: 12px;
+        display: flex;
+        gap: 12px;
+      }
+
+      .comment-img {
+        width: 45px;
+        height: 45px;
+        border-radius: 50%;
+        object-fit: cover;
+      }
+
+      .comment-content {
+        white-space: pre-wrap;
+        margin: 0;
+      }
+
+      /* Fade Animation */
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+    <%- include('./partials/nav') %>
+
+    <!-- BLOG SECTION -->
+    <div class="container mt-4">
+      <div class="blog-container">
+        <h1 class="blog-title"><%= blog.title %></h1>
+
+        <img src="<%= blog.coverImageURL %>" class="blog-image" />
+
+        <div class="blog-content">
+          <%= blog.body %>
+        </div>
+      </div>
+    </div>
+
+    <!-- AUTHOR SECTION -->
+    <div class="author-card">
+      <img
+        src="<%= blog.createdBy.profileImageURL %>"
+        class="author-img"
+      />
+      <div>
+        <h5 class="m-0"><%= blog.createdBy.fullName %></h5>
+        <p class="text-muted small m-0">Author</p>
+      </div>
+    </div>
+
+    <!-- COMMENTS SECTION -->
+    <div class="comment-box">
+
+      <div class="comment-title mb-3">
+        Comments (<%= comments.length %>)
+      </div>
+
+      <% if (locals.user) { %>
+      <form action="/blog/comment/<%= blog._id %>" method="post">
+        <div class="mb-3 d-flex gap-2">
+          <input
+            type="text"
+            name="content"
+            class="form-control"
+            placeholder="Write a comment..."
+          />
+          <button class="btn btn-primary">Post</button>
+        </div>
+      </form>
+      <% } %>
+
+      <% comments.forEach(comment => { %>
+      <div class="comment-item">
+        <img
+          src="<%= comment.createdBy.profileImageURL %>"
+          class="comment-img"
+        />
+        <div>
+          <strong><%= comment.createdBy.fullName %></strong>
+          <p class="comment-content"><%= comment.content %></p>
+        </div>
+      </div>
+      <% }) %>
+    </div>
+
+    <%- include('./partials/scripts') %>
+  </body>
+</html>
